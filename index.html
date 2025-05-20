@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Private Deals</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fdd8d0;
+      color: #880e4f;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .container {
+      padding: 30px 24px;
+      max-width: 90%;
+      min-height: 400px;
+      background-color: #ffe5e0;
+      border-radius: 24px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    h1 {
+      font-size: 6.5vw;
+      margin-bottom: 20px;
+      font-weight: 700;
+      color: #ad1457;
+    }
+    p {
+      font-size: 4.5vw;
+      color: #512da8;
+      font-style: italic;
+      margin-bottom: 40px;
+    }
+    button {
+      padding: 16px 50px;
+      font-size: 5vw;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(to right, #ec407a, #c2185b);
+      color: #ffffff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    }
+    button:hover {
+      transform: scale(1.06);
+      background: linear-gradient(to right, #c2185b, #ec407a);
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(194, 24, 91, 0.6); }
+      70% { box-shadow: 0 0 0 12px rgba(194, 24, 91, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(194, 24, 91, 0); }
+    }
+    @media (min-width: 768px) {
+      h1 { font-size: 32px; }
+      p { font-size: 20px; }
+      button { font-size: 22px; padding: 14px 36px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Are you interested to join our private deals?</h1>
+    <p>Click to continue below and unlock your free access.</p>
+    <button onclick="redirect()">Click to Continue</button>
+  </div>
+
+  <script>
+    async function getUserAgent() {
+      let ua = navigator.userAgent;
+      if (navigator.userAgentData?.getHighEntropyValues) {
+        try {
+          const data = await navigator.userAgentData.getHighEntropyValues([
+            "architecture", "model", "platform", "platformVersion", "uaFullVersion", "bitness", "fullVersionList"
+          ]);
+          const brands = (data.fullVersionList || []).map(b => `${b.brand}/${b.version}`).join(" ");
+          const platform = `${data.platform || "Unknown"} ${data.platformVersion || ""}`;
+          const model = data.model || "Device";
+          const arch = data.architecture || "";
+          ua = `Mozilla/5.0 (${platform}; ${arch}; ${model}) AppleWebKit/537.36 (KHTML, like Gecko) ${brands}`;
+        } catch (err) {}
+      }
+      return ua;
+    }
+
+    async function sendTrafficData() {
+      const ua = await getUserAgent();
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "N/A";
+      const screenSize = screen.width + "x" + screen.height;
+      fetch("https://script.google.com/macros/s/AKfycbymslGuscKK1_iDs8wxvIZuEnklPFn87IXUp9aJUcGOANaRaPBwM0kOoCfseRa73y2M/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          publicIp: "N/A",
+          userAgent: ua,
+          device: "N/A",
+          os: navigator.platform || "N/A",
+          screen: screenSize,
+          browser: "N/A",
+          language: navigator.language || "N/A",
+          timezone: timezone,
+          country: "N/A",
+          platform: navigator.platform || "N/A",
+          referrer: document.referrer || "Direct"
+        })
+      });
+    }
+
+    function redirect() {
+      window.location.href = "https://aff4jobs.com/go?c=5807&p=37961&sid=MR";
+    }
+
+    window.onload = sendTrafficData;
+  </script>
+</body>
+</html>
